@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+        {{ product.description|truncatewords:155 }}
+{% endblock %}
+
+{% block title %}
+    {% if product %}
+        {{ product.name }} - ABC Store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div>
+    {% comment %} <div>
+        <p><a href="{% url 'shop:AllProductCat'%}">Home</a>|<a href="{{product.category.get_url}}">{{product.category}}</a>{{product.name}} </p>
+    </div> {% endcomment %}
+</div>
+<br>
+<div class="container ">
+<div class="row">
+    <div class="col-12 cpl-sm-12 col-md-12 col-lg-6">
+        <div>
+            <img src="{{product.image.url}}" alt="{{product.name}}" width="500px" height="500px">
+        </div>
+    </div>
+    <div class="col-12 cpl-sm-12 col-md-12 col-lg-6">
+        <div >
+            <h1>{{product.name}}</h1>
+            <h3><b><img src="{% static 'img/icons/rupee.svg' %}" height="28px">{{product.price}}</b></h3>
+            <h4>Product Description</h4>
+            <p>{{product.description}}</p>
+            {% if product.stock <= 0 %}
+            <h4><b>OUT OF STOCK</b></h4>
+            {% else %}
+            <div class="cart2">
+            {% comment %} <a href="{% url 'cart_app:add_cart' product.id %}" class="btn btn-warning">ADD TO CART</a>
+            <a href="" class="btn btn-success p_buys">BUY</a> {% endcomment %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</div>
+<br>
+<br>
+<br>
+{% endblock %}

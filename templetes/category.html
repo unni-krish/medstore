@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis lacinia varius nibh, nec dignissim leo.
+    Duis commodo eleifend arcu, id semper velit porttitor sit amet. Cras non consectetur leo. Morbi turpis neque,
+
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{ category.name }} -MEDLINC
+    {% else %}
+    MEDLINC
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<!--    {% if category %}-->
+<!--&lt;!&ndash;<div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <p><a href="{% url 'shop:AllProductCat' %}">products</a> </p>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--    {% endif %}-->
+<div>
+    {% if category %}
+    <img src="{{category.image.url}}" alt="{{category.name}}" class="catimg">
+</div>
+<br>
+<div>
+    <h1 class="text-center">{{category.name}}</h1>
+    <p class="text-center">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+    <center>
+<img src="{% static 'img/banner.png' %}" alt="OUR Products" width="700px" height="400px">
+    </center>
+</div>
+<br>
+
+    {% endif %}
+    <div class="container-fluid search">
+        <div class="searchbar">
+          <center>
+            <form class="d-flex" role="search" action="{% url 'shop:Searchresult' %}" method="get">
+              {% csrf_token %}
+              <input class="form-control me-2" id="sea-bar" type="search" placeholder="Search" name="q" aria-label="Search" style="width: 450px;">
+
+              <button class="btn btn-outline-success me-2" type="submit" placeholder="Search">Search</button>
+              <button class="btn btn-warning" type="submit" placeholder="Search">Scanner</button>
+            </form>
+          </center>
+        </div>
+      </div>
+      
+
+    <br>
+    <br>
+<div class="container-fluid">
+    <div class="row">
+        {% for i in product.object_list %}
+        <div class="col-xl-3 " style="padding:20px;">
+            <div class="card" style="width: 20rem; height: 30rem; border: 2px solid #ccc; border-color: green;">
+    <a href="{{i.get_url}}"> <img src="{{i.image.url}}" alt="{{i.name}}" class="card-img-top" alt="..." width="100%" height="250px"></a>
+  <div class="card-body">
+    <h5 class="card-title">{{i.name}}</h5>
+    <div>Store
+          <h4 class="card-text" style="color:rgb(8,138,213);" >{{i.store}},<br>{{i.location}}</h4>
+          </div>
+      <div class="price" >
+          <p class="card-text" ><img src="{% static 'img/icons/rupee.svg' %}" height="28px"><b>{{i.price}}</b></p>
+          </div>
+      <div class="text-center cart">
+    {% comment %} <a href="{% url 'cart_app:add_cart' i.id %}" class="btn btn-warning" style="color:black;">Add to Cart</a> {% endcomment %}
+<!--    </a> <a href="#" class="btn btn-success buy">Buy</a>-->
+          </div>
+  </div>
+</div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if product.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in product.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-dark btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+    <br>
+</div>
+{% endblock %}
